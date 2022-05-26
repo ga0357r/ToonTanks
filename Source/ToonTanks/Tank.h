@@ -46,5 +46,4 @@ private:
 	void SetupComponents();
 	void MoveForward(float value);
 	void Turn(float value);
-	void RotateTurret(float value);
 };

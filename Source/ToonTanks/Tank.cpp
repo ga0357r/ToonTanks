@@ -3,8 +3,11 @@
 
 #include "Tank.h"
 #include "Camera/CameraComponent.h"
+#include "DrawDebugHelpers.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+
+#define OUT
 
 // Sets default values
 ATank::ATank()
@@ -26,6 +29,18 @@ void ATank::BeginPlay()
 void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (PlayerControllerRef)
+	{
+		FHitResult HitResult;
+		PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, OUT HitResult);
+		RotateTurret(HitResult.ImpactPoint);
+
+		if (DrawDebugHelpers)
+		{
+			DrawDebugSphere(GetWorld(), OUT HitResult.ImpactPoint, 25.f, 12, FColor::Red, false, -1.f);
+		}
+	}
 }
 
 void ATank::SetupComponents()
@@ -43,7 +58,6 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATank::MoveForward);
 	PlayerInputComponent->BindAxis("Turn", this, &ATank::Turn);
-	PlayerInputComponent->BindAxis("RotateTurret", this, &ATank::RotateTurret);
 }
 
 void ATank::MoveForward(float Value)
@@ -59,9 +73,4 @@ void ATank::Turn(float Value)
 	FRotator DeltaRotation = FRotator(0.f);
 	DeltaRotation.Yaw = Value * UGameplayStatics::GetWorldDeltaSeconds(this) * RotationSpeed;
 	AddActorLocalRotation(DeltaRotation, true);
-}
-
-void ATank::RotateTurret(float value)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Tank Turret Rotating"));
 }

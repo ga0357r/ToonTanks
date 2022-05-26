@@ -15,6 +15,12 @@ public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug Helpers", meta = (AllowPrivateAccess = "true"))
+	bool DrawDebugHelpers = false;
+
+	void RotateTurret(FVector LookAtTarget);
+
 private:
 	// Private Serialized Fields
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BasePawn Components", meta = (AllowPrivateAccess = "true"))
