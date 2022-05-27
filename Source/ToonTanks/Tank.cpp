@@ -7,8 +7,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-#define OUT
-
 // Sets default values
 ATank::ATank()
 {
@@ -33,12 +31,12 @@ void ATank::Tick(float DeltaTime)
 	if (PlayerControllerRef)
 	{
 		FHitResult HitResult;
-		PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, OUT HitResult);
+		PlayerControllerRef->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 		RotateTurret(HitResult.ImpactPoint);
 
 		if (DrawDebugHelpers)
 		{
-			DrawDebugSphere(GetWorld(), OUT HitResult.ImpactPoint, 25.f, 12, FColor::Red, false, -1.f);
+			DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 25.f, 12, FColor::Red, false, -1.f);
 		}
 	}
 }
@@ -58,6 +56,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATank::MoveForward);
 	PlayerInputComponent->BindAxis("Turn", this, &ATank::Turn);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATank::Fire);
 }
 
 void ATank::MoveForward(float Value)

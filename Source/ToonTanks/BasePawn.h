@@ -21,6 +21,8 @@ protected:
 
 	void RotateTurret(FVector LookAtTarget);
 
+	void Fire();
+
 private:
 	// Private Serialized Fields
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BasePawn Components", meta = (AllowPrivateAccess = "true"))
