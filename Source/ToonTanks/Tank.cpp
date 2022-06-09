@@ -68,7 +68,6 @@ void ATank::MoveForward(float Value)
 
 void ATank::Turn(float Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Tank Turning"));
 	FRotator DeltaRotation = FRotator(0.f);
 	DeltaRotation.Yaw = Value * UGameplayStatics::GetWorldDeltaSeconds(this) * RotationSpeed;
 	AddActorLocalRotation(DeltaRotation, true);

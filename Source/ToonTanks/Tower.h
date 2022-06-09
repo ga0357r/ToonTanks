@@ -29,4 +29,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	float FireRange = 1000.f;
+
+	FTimerHandle FireRateTimerHandle;
+	float FireRate = 2.f;
+
+
+private:
+	void CheckFireCondition();
+	inline bool IsInFireRange();
 };

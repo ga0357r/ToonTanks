@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "Tank.h"
+#include "TimerManager.h"
 
 
 ATower::ATower()
@@ -23,21 +24,42 @@ void ATower::BeginPlay()
 	{
 		DrawDebugSphere(GetWorld(), GetActorLocation(), FireRange, 25, FColor::Red, true, -1.f);
 	}
+
+	GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ATower::CheckFireCondition, FireRate, true);
+}
+
+void ATower::CheckFireCondition()
+{
+	//check distance from the tower to the tank
+
+	if (IsInFireRange())
+	{
+		Fire();
+	}
+	
+	
+}
+
+inline bool ATower::IsInFireRange()
+{
+	if (PlayerTankRef)
+	{
+		float DistanceToTank = FVector::Dist(PlayerTankRef->GetActorLocation(), GetActorLocation());
+		return DistanceToTank <= FireRange;
+	}
+
+	return false;
 }
 
 void ATower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (PlayerTankRef)
-	{
-		//Find distance to tank
-		float DistanceToTank = FVector::Dist(PlayerTankRef->GetActorLocation(), GetActorLocation());
 
-		//check to see if the tank is in range
-		if (DistanceToTank <= FireRange)
-		{
-			RotateTurret(PlayerTankRef->GetActorLocation());
-		}
+	//check to see if the tank is in range
+	if (IsInFireRange())
+	{
+		RotateTurret(PlayerTankRef->GetActorLocation());
 	}
+	
 }
