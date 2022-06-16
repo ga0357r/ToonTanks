@@ -30,6 +30,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Combat")
 	class UProjectileMovementComponent* ProjectileMovementComponent;
 
+	UPROPERTY(EditAnywhere)
+	float Damage = 50.f;
+
 private:
 	void SetupComponents();
 
